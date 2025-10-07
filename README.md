@@ -18,4 +18,7 @@
 - Получение сгенерированной конфигурации
 - Кнопка «перегенерировать сборку»
 
+## Макет
+- https://www.figma.com/design/1B3warj2fCa4QO982koBYt/Untitled?node-id=0-1&m=dev&t=GMFqMXxRHeezwoGN-1
+
 
