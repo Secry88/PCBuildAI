@@ -64,7 +64,6 @@ dependencies {
     //Supabase
     implementation(platform("io.github.jan-tennert.supabase:bom:3.2.6"))
     implementation("io.github.jan-tennert.supabase:postgrest-kt:3.2.6")
-    implementation("io.github.jan-tennert.supabase:gotrue-kt:3.2.6")
     implementation("io.github.jan-tennert.supabase:realtime-kt:3.2.6")
     implementation("io.github.jan-tennert.supabase:storage-kt:3.2.6")
 
@@ -78,9 +77,9 @@ dependencies {
 
 
     // Hilt
-    implementation("com.google.dagger:hilt-android:2.48.1")
-    kapt("com.google.dagger:hilt-android-compiler:2.48.1")
-    implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
+    implementation("com.google.dagger:hilt-android:2.57.2")
+    kapt("com.google.dagger:hilt-android-compiler:2.57.2")
+    implementation("androidx.hilt:hilt-navigation-compose:1.3.0")
 
     // Room
     implementation("androidx.room:room-runtime:2.6.1")
