@@ -1,11 +1,12 @@
 package com.example.pcbuildai.Domain.Models
 
-import java.util.Date
+import kotlinx.datetime.Instant
 import java.util.UUID
 
+@OptIn(kotlin.time.ExperimentalTime::class)
 data class Build(
     val id: UUID,
-    val createdAt: Date,
+    val createdAt: Instant,
     val userId: UUID,
     val budget: Float,
     val purpose: String,
