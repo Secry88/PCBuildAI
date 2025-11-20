@@ -4,7 +4,8 @@ import java.util.UUID
 
 data class Profile(
     val id: UUID,
-    val username: String?,
-    val avatarUrl: String?,
+    val name: String?,
+    val surname: String?,
+    val avatar: String?,
     val phoneNumber: String?
 )
