@@ -1,5 +1,5 @@
-import com.example.pcbuildai.Data.Remote.Dto.ComponentsDto
-import com.example.pcbuildai.Domain.Models.Components
+import com.example.pcbuildai.data.remote.dto.ComponentsDto
+import com.example.pcbuildai.domain.models.Components
 import java.util.UUID
 
 fun ComponentsDto.toDomain() = Components(

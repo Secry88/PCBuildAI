@@ -1,4 +1,4 @@
-package com.example.pcbuildai.Data.Remote.Dto
+package com.example.pcbuildai.data.remote.dto
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

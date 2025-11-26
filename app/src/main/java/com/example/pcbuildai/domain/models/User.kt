@@ -1,4 +1,4 @@
-package com.example.pcbuildai.Domain.Models
+package com.example.pcbuildai.domain.models
 
 import java.util.UUID
 

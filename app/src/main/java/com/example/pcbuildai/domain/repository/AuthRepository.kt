@@ -1,7 +1,7 @@
-package com.example.pcbuildai.Domain.Repository
+package com.example.pcbuildai.domain.repository
 
-import com.example.pcbuildai.Domain.Models.Profile
-import com.example.pcbuildai.Domain.Models.User
+import com.example.pcbuildai.domain.models.Profile
+import com.example.pcbuildai.domain.models.User
 
 interface AuthRepository {
     suspend fun signIn(email: String, password: String): User

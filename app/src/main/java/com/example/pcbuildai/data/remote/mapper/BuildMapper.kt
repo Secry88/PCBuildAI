@@ -1,6 +1,6 @@
-import com.example.pcbuildai.Data.Remote.Dto.BuildDto
-import com.example.pcbuildai.Domain.Models.Build
-import com.example.pcbuildai.Domain.Models.Components
+import com.example.pcbuildai.data.remote.dto.BuildDto
+import com.example.pcbuildai.domain.models.Build
+import com.example.pcbuildai.domain.models.Components
 import kotlinx.datetime.Instant
 import java.util.UUID
 

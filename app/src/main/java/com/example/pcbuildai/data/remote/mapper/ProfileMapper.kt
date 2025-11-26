@@ -1,5 +1,5 @@
-import com.example.pcbuildai.Data.Remote.Dto.ProfileDto
-import com.example.pcbuildai.Domain.Models.Profile
+import com.example.pcbuildai.data.remote.dto.ProfileDto
+import com.example.pcbuildai.domain.models.Profile
 import java.util.UUID
 
 fun ProfileDto.toDomain(email: String) = Profile(

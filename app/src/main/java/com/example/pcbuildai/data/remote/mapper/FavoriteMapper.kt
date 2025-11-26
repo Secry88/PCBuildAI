@@ -1,5 +1,5 @@
-import com.example.pcbuildai.Data.Remote.Dto.FavoritesDto
-import com.example.pcbuildai.Domain.Models.Favorites
+import com.example.pcbuildai.data.remote.dto.FavoritesDto
+import com.example.pcbuildai.domain.models.Favorites
 import kotlinx.datetime.Instant
 import java.util.UUID
 

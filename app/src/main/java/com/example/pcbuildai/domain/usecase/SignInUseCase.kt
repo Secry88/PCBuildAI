@@ -1,7 +1,6 @@
-package com.example.pcbuildai.Domain.UseCase
+package com.example.pcbuildai.domain.usecase
 
-import com.example.pcbuildai.Domain.Models.User
-import com.example.pcbuildai.Domain.Repository.AuthRepository
+import com.example.pcbuildai.domain.repository.AuthRepository
 
 class SignInUseCase(private val authRepository: AuthRepository) {
     suspend operator fun invoke (email: String, password: String) = authRepository.signIn(email, password)

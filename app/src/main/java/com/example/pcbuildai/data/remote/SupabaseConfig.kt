@@ -1,4 +1,4 @@
-package com.example.pcbuildai.Data.Remote
+package com.example.pcbuildai.data.remote
 
 object SupabaseConfig {
     const val BASE_URL = "https://qtljjxbgdscsbasytwdg.supabase.co"

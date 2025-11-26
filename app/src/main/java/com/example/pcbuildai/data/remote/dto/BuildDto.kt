@@ -1,10 +1,8 @@
-package com.example.pcbuildai.Data.Remote.Dto
+package com.example.pcbuildai.data.remote.dto
 
-import com.example.pcbuildai.Domain.Models.Components
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import java.util.Date
-import java.util.UUID
+
 @Serializable
 data class BuildDto(
     val id: String,
