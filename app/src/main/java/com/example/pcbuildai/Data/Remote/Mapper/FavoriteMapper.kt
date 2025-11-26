@@ -10,6 +10,3 @@ fun FavoritesDto.toDomain() = Favorites(
     buildId = UUID.fromString(buildId),
     createdAt = Instant.parse(createdAt)
 )
-
-
-)
