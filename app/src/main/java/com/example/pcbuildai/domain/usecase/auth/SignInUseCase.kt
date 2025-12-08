@@ -1,4 +1,4 @@
-package com.example.pcbuildai.domain.usecase
+package com.example.pcbuildai.domain.usecase.auth
 
 import com.example.pcbuildai.domain.repository.AuthRepository
 

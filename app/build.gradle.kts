@@ -3,7 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     id("kotlin-kapt")
-    id("com.google.dagger.hilt.android")
+    id("com.google.dagger.hilt.android") version "2.56.2"
     kotlin("plugin.serialization") version "1.9.20"
 }
 
@@ -61,41 +61,59 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
 
-    //Supabase
-    implementation(platform("io.github.jan-tennert.supabase:bom:3.2.6"))
-    implementation("io.github.jan-tennert.supabase:postgrest-kt:3.2.6")
-    implementation("io.github.jan-tennert.supabase:realtime-kt:3.2.6")
-    implementation("io.github.jan-tennert.supabase:storage-kt:3.2.6")
+    // Material2
+    implementation("androidx.compose.material:material:1.5.4")
+    implementation("androidx.compose.material:material-icons-core:1.5.4")
+    implementation("androidx.compose.material:material-icons-extended:1.5.4")
+    implementation("androidx.compose.runtime:runtime-livedata:1.5.4")
 
-    // Ktor
-    implementation("io.ktor:ktor-client-core:3.3.2")
-    implementation("io.ktor:ktor-client-android:3.3.2")
-    implementation("io.ktor:ktor-client-cio:3.3.2")
-    implementation("io.ktor:ktor-client-content-negotiation:3.3.2")
-    implementation("io.ktor:ktor-client-logging:3.3.2")
-    implementation("io.ktor:ktor-serialization-kotlinx-json:3.3.2")
-
+    // Navigation Compose
+    implementation("androidx.navigation:navigation-compose:2.7.5")
 
     // Hilt
-    implementation("com.google.dagger:hilt-android:2.57.2")
-    kapt("com.google.dagger:hilt-android-compiler:2.57.2")
+    implementation("com.google.dagger:hilt-android:2.56.2")
+    kapt("com.google.dagger:hilt-android-compiler:2.56.2")
     implementation("androidx.hilt:hilt-navigation-compose:1.3.0")
 
-    // Room
-    implementation("androidx.room:room-runtime:2.6.1")
-    implementation("androidx.room:room-ktx:2.6.1")
-    kapt("androidx.room:room-compiler:2.6.1")
+    // Supabase
+    implementation(platform("io.github.jan-tennert.supabase:bom:2.3.1"))
+    implementation("io.github.jan-tennert.supabase:postgrest-kt")
+    implementation("io.github.jan-tennert.supabase:gotrue-kt")
+    implementation("io.github.jan-tennert.supabase:compose-auth-ui")
+    implementation("io.github.jan-tennert.supabase:compose-auth")
 
-    // Coil
-    implementation("io.coil-kt:coil-compose:2.5.0")
 
-    //Core
-    implementation("androidx.core:core-ktx:1.12.0")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
+    // Ktor + OkHttp
+    implementation("io.ktor:ktor-client-core:2.3.7")
+    implementation("io.ktor:ktor-client-okhttp:2.3.7")
+    implementation("io.ktor:ktor-client-content-negotiation:2.3.7")
+    implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.7")
+    implementation("io.ktor:ktor-client-logging:2.3.7")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.11.0")
 
-    //Tests
-    testImplementation("org.mockito:mockito-core:4.11.0")
-    testImplementation("org.mockito.kotlin:mockito-kotlin:4.1.0")
-    testImplementation(kotlin("test"))
-    testImplementation("com.squareup.okhttp3:mockwebserver:4.12.0")
+
+    // Kotlin Serialization
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
+
+    // Coroutines
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+
+    // DataStore
+    implementation("androidx.datastore:datastore-preferences:1.1.0")
+
+    // Google Identity / Credentials
+    implementation("androidx.credentials:credentials:1.2.0")
+    implementation("com.google.android.libraries.identity.googleid:googleid:1.1.0")
+
+
+    // Testing
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(platform(libs.androidx.compose.bom))
+    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
+
+    implementation("com.jakewharton.threetenabp:threetenabp:1.4.4")
+    implementation("com.google.accompanist:accompanist-swiperefresh:0.30.1")
 }
