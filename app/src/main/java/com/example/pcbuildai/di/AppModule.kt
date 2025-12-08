@@ -5,8 +5,9 @@ import com.example.pcbuildai.data.repository.AuthRepositoryImpl
 import com.example.pcbuildai.domain.repository.AuthRepository
 import com.example.pcbuildai.domain.usecase.auth.AuthUseCases
 import com.example.pcbuildai.domain.usecase.auth.GetProfileUseCase
-import com.example.pcbuildai.domain.usecase.SignInUseCase
-import com.example.pcbuildai.domain.usecase.SignUpUseCase
+import com.example.pcbuildai.domain.usecase.auth.SignInUseCase
+import com.example.pcbuildai.domain.usecase.auth.SignUpUseCase
+
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
