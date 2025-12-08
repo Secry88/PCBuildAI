@@ -21,20 +21,8 @@ class AuthViewModel @Inject constructor(
     private val useCases: AuthUseCases
 ) : ViewModel() {
 
-    private val _state = MutableStateFlow(AuthState())
+    val _state = MutableStateFlow(AuthState())
     val state: StateFlow<AuthState> = _state
-
-    fun signUp(email: String, password: String) {
-        _state.value = AuthState(isLoading = true)
-        viewModelScope.launch {
-            try {
-                val user = useCases.signUpUseCase(email, password)
-                _state.value = AuthState(user = user) // Навигация на MainScreen через state.user
-            } catch (e: Exception) {
-                _state.value = AuthState(error = e.message)
-            }
-        }
-    }
 
     fun signIn(email: String, password: String) {
         _state.value = AuthState(isLoading = true)
@@ -47,4 +35,17 @@ class AuthViewModel @Inject constructor(
             }
         }
     }
+
+    fun signUp(email: String, password: String) {
+        _state.value = AuthState(isLoading = true)
+        viewModelScope.launch {
+            try {
+                val user = useCases.signUpUseCase(email, password)
+                _state.value = AuthState(user = user)
+            } catch (e: Exception) {
+                _state.value = AuthState(error = e.message)
+            }
+        }
+    }
 }
+
