@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-data class AuthState(
+data class LoginState(
     val isLoading: Boolean = false,
     val user: User? = null,
     val error: String? = null
@@ -21,31 +21,24 @@ class AuthViewModel @Inject constructor(
     private val useCases: AuthUseCases
 ) : ViewModel() {
 
-    val _state = MutableStateFlow(AuthState())
-    val state: StateFlow<AuthState> = _state
+    private val _state = MutableStateFlow(LoginState())
+    val state: StateFlow<LoginState> = _state
 
     fun signIn(email: String, password: String) {
-        _state.value = AuthState(isLoading = true)
+        if (email.isBlank() || password.isBlank()) {
+            _state.value = LoginState(error = "Заполните все поля")
+            return
+        }
+
+        _state.value = LoginState(isLoading = true)
+
         viewModelScope.launch {
             try {
                 val user = useCases.signInUseCase(email, password)
-                _state.value = AuthState(user = user)
+                _state.value = LoginState(user = user)
             } catch (e: Exception) {
-                _state.value = AuthState(error = e.message)
-            }
-        }
-    }
-
-    fun signUp(email: String, password: String) {
-        _state.value = AuthState(isLoading = true)
-        viewModelScope.launch {
-            try {
-                val user = useCases.signUpUseCase(email, password)
-                _state.value = AuthState(user = user)
-            } catch (e: Exception) {
-                _state.value = AuthState(error = e.message)
+                _state.value = LoginState(error = e.message ?: "Ошибка авторизации")
             }
         }
     }
 }
-
