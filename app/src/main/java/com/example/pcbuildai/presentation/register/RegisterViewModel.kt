@@ -28,6 +28,10 @@ class RegisterViewModel @Inject constructor(
     val state: StateFlow<RegisterState> = _state
 
     fun signUp(email: String, password: String, confirm: String) {
+        if (email.isBlank() || password.isBlank() || confirm.isBlank()) {
+            _state.value = RegisterState(error = "Заполните все поля")
+            return
+        }
         EmailValidator.validate(email)?.let {
             _state.value = RegisterState(error = it)
             return

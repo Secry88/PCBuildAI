@@ -28,6 +28,10 @@ class AuthViewModel @Inject constructor(
     val state: StateFlow<LoginState> = _state
 
     fun signIn(email: String, password: String) {
+        if (email.isBlank() || password.isBlank()) {
+            _state.value = LoginState(error = "Заполните все поля")
+            return
+        }
         EmailValidator.validate(email)?.let {
             _state.value = LoginState(error = it)
             return

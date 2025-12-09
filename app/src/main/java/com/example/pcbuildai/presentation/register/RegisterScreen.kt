@@ -1,14 +1,17 @@
 package com.example.pcbuildai.presentation.register
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.pcbuildai.presentation.auth.AuthViewModel
-import kotlinx.coroutines.launch
 
 @Composable
 fun RegistrationScreen(
@@ -26,30 +29,98 @@ fun RegistrationScreen(
     var password by remember { mutableStateOf("") }
     var confirm by remember { mutableStateOf("") }
 
-    Column(
-        modifier = Modifier.fillMaxSize().padding(16.dp),
-        verticalArrangement = Arrangement.Center
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White),
+        contentAlignment = Alignment.Center
     ) {
-        TextField(value = email, onValueChange = { email = it }, label = { Text("Email") })
-        Spacer(modifier = Modifier.height(8.dp))
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.padding(horizontal = 32.dp)
+        ) {
+            Text(
+                text = "Давайте создадим ваш аккаунт",
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(bottom = 24.dp)
+            )
 
-        TextField(value = password, onValueChange = { password = it }, label = { Text("Password") })
-        Spacer(modifier = Modifier.height(8.dp))
+            OutlinedTextField(
+                value = email,
+                onValueChange = { email = it },
+                label = { Text("Логин") },
+                singleLine = true,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(56.dp),
+                shape = RoundedCornerShape(12.dp),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedContainerColor = Color.Transparent,
+                    unfocusedContainerColor = Color.Transparent
+                )
+            )
+            Spacer(modifier = Modifier.height(12.dp))
+            OutlinedTextField(
+                value = password,
+                onValueChange = { password = it },
+                label = { Text("Пароль") },
+                singleLine = true,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(56.dp),
+                shape = RoundedCornerShape(12.dp),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedContainerColor = Color.Transparent,
+                    unfocusedContainerColor = Color.Transparent
+                )
+            )
+            Spacer(modifier = Modifier.height(12.dp))
+            OutlinedTextField(
+                value = confirm,
+                onValueChange = { confirm = it },
+                label = { Text("Подтвердите пароль") },
+                singleLine = true,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(56.dp),
+                shape = RoundedCornerShape(12.dp),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedContainerColor = Color.Transparent,
+                    unfocusedContainerColor = Color.Transparent
+                )
+            )
 
-        TextField(value = confirm, onValueChange = { confirm = it }, label = { Text("Confirm Password") })
-        Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(24.dp))
 
-        Button(
-            onClick = { viewModel.signUp(email, password, confirm) },
-            enabled = !state.isLoading
-        ) { Text("Зарегистрироваться") }
+            Button(
+                onClick = { viewModel.signUp(email, password, confirm) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(56.dp),
+                shape = RoundedCornerShape(28.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = Color.Black),
+                enabled = !state.isLoading
+            ) {
+                Text("Зарегистрироваться", color = Color.White, fontSize = 16.sp)
+            }
 
-        TextButton(onClick = onNavigateBack) {
-            Text("Уже есть аккаунт? Войти")
+            Spacer(modifier = Modifier.height(12.dp))
+            TextButton(onClick = onNavigateBack) {
+                Text("Уже есть аккаунт? Войти", color = Color.Gray)
+            }
+
+            if (state.error != null) {
+                Spacer(modifier = Modifier.height(12.dp))
+                state.error?.let { errorText ->
+                    Text(errorText, color = Color.Red)
+                }
+            }
+
+            if (state.isLoading) {
+                Spacer(modifier = Modifier.height(12.dp))
+                CircularProgressIndicator()
+            }
         }
-
-        state.error?.let { Text(it, color = Color.Red) }
-        if (state.isLoading) CircularProgressIndicator()
     }
 }
-
