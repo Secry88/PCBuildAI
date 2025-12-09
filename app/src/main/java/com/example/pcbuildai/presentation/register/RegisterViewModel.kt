@@ -2,8 +2,11 @@ package com.example.pcbuildai.presentation.register
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.pcbuildai.domain.mapper.AuthErrorMapper
 import com.example.pcbuildai.domain.models.User
 import com.example.pcbuildai.domain.usecase.auth.AuthUseCases
+import com.example.pcbuildai.domain.validation.EmailValidator
+import com.example.pcbuildai.domain.validation.PasswordValidator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -25,11 +28,14 @@ class RegisterViewModel @Inject constructor(
     val state: StateFlow<RegisterState> = _state
 
     fun signUp(email: String, password: String, confirm: String) {
-        if (email.isBlank() || password.isBlank() || confirm.isBlank()) {
-            _state.value = RegisterState(error = "Заполните все поля")
+        EmailValidator.validate(email)?.let {
+            _state.value = RegisterState(error = it)
             return
         }
-
+        PasswordValidator.validate(password)?.let {
+            _state.value = RegisterState(error = it)
+            return
+        }
         if (password != confirm) {
             _state.value = RegisterState(error = "Пароли не совпадают")
             return
@@ -42,8 +48,10 @@ class RegisterViewModel @Inject constructor(
                 val user = useCases.signUpUseCase(email, password)
                 _state.value = RegisterState(user = user)
             } catch (e: Exception) {
-                _state.value = RegisterState(error = e.message ?: "Ошибка регистрации")
+                val errorMsg = AuthErrorMapper.map(e.message ?: "")
+                _state.value = RegisterState(error = errorMsg)
             }
         }
     }
+
 }

@@ -2,8 +2,11 @@ package com.example.pcbuildai.presentation.auth
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.pcbuildai.domain.mapper.AuthErrorMapper
 import com.example.pcbuildai.domain.models.User
 import com.example.pcbuildai.domain.usecase.auth.AuthUseCases
+import com.example.pcbuildai.domain.validation.EmailValidator
+import com.example.pcbuildai.domain.validation.PasswordValidator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -25,8 +28,12 @@ class AuthViewModel @Inject constructor(
     val state: StateFlow<LoginState> = _state
 
     fun signIn(email: String, password: String) {
-        if (email.isBlank() || password.isBlank()) {
-            _state.value = LoginState(error = "Заполните все поля")
+        EmailValidator.validate(email)?.let {
+            _state.value = LoginState(error = it)
+            return
+        }
+        PasswordValidator.validate(password)?.let {
+            _state.value = LoginState(error = it)
             return
         }
 
@@ -37,8 +44,10 @@ class AuthViewModel @Inject constructor(
                 val user = useCases.signInUseCase(email, password)
                 _state.value = LoginState(user = user)
             } catch (e: Exception) {
-                _state.value = LoginState(error = e.message ?: "Ошибка авторизации")
+                val errorMsg = AuthErrorMapper.map(e.message ?: "")
+                _state.value = LoginState(error = errorMsg)
             }
         }
     }
+
 }
