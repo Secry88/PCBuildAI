@@ -1,8 +1,4 @@
-<<<<<<<< HEAD:app/src/main/java/com/example/pcbuildai/domain/usecase/SignUpUseCase.kt
-package com.example.pcbuildai.domain.usecase
-========
 package com.example.pcbuildai.domain.usecase.auth
->>>>>>>> feature/supabse-auth-impl:app/src/main/java/com/example/pcbuildai/domain/usecase/auth/SignUpUseCase.kt
 
 import com.example.pcbuildai.domain.repository.AuthRepository
 
