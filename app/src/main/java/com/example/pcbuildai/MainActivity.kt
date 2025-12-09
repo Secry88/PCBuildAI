@@ -12,13 +12,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.lifecycleScope
+import com.example.pcbuildai.presentation.auth.AuthScreen
+import com.example.pcbuildai.presentation.navigation.AppNavGraph
 import com.example.pcbuildai.ui.theme.PCBuildAITheme
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-
+        setContent {
+            AppNavGraph()
+        }
     }
 }
+

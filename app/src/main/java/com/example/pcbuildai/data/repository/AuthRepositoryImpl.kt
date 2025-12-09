@@ -6,8 +6,10 @@ import com.example.pcbuildai.domain.repository.AuthRepository
 
 class AuthRepositoryImpl(private val authService: AuthService) : AuthRepository {
     override suspend fun signUp(email: String, password: String): User {
-        val response = authService.signUp(email, password)
-        val dto = response.
+        return authService.signUp(email, password)
     }
 
+    override suspend fun signIn(email: String, password: String): User {
+        return  authService.signIn(email, password)
+    }
 }
