@@ -1,15 +1,26 @@
 package com.example.pcbuildai.data.repository
 
 import com.example.pcbuildai.data.remote.services.AuthService
+import com.example.pcbuildai.data.remote.services.ProfileService
+import com.example.pcbuildai.domain.models.Profile
 import com.example.pcbuildai.domain.models.User
 import com.example.pcbuildai.domain.repository.AuthRepository
+import toDomain
 
-class AuthRepositoryImpl(private val authService: AuthService) : AuthRepository {
+class AuthRepositoryImpl(
+    private val authService: AuthService,
+    private val profileService: ProfileService
+) : AuthRepository {
     override suspend fun signUp(email: String, password: String): User {
         return authService.signUp(email, password)
     }
 
     override suspend fun signIn(email: String, password: String): User {
         return  authService.signIn(email, password)
+    }
+
+    override suspend fun getProfile(userId: String): Profile {
+        return profileService.getProfile(userId).toDomain()
+
     }
 }
