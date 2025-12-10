@@ -1,8 +1,8 @@
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -17,9 +17,19 @@ import com.example.pcbuildai.presentation.profile.ProfileViewModel
 @Composable
 fun ProfileScreen(
     viewModel: ProfileViewModel = hiltViewModel(),
-    userId: String
+    userId: String,
+    onNavigateToUpdateProfile: (Profile) -> Unit,
 ) {
     val state = viewModel.state
+
+    val shouldRefresh by viewModel.shouldRefresh.observeAsState()
+    LaunchedEffect(shouldRefresh) {
+        if (shouldRefresh == true) {
+            viewModel.loadProfile(userId)
+            viewModel.onRefreshConsumed()
+        }
+    }
+
 
     LaunchedEffect(Unit) {
         viewModel.loadProfile(userId)
@@ -37,13 +47,19 @@ fun ProfileScreen(
             }
         }
         state.profile != null -> {
-            ProfileContent(profile = state.profile)
+            ProfileContent(
+                profile = state.profile,
+                onUpdateClick = {onNavigateToUpdateProfile (state.profile)}
+            )
         }
     }
 }
 
 @Composable
-fun ProfileContent(profile: Profile) {
+fun ProfileContent(
+    profile: Profile,
+    onUpdateClick: () -> Unit
+) {
 
     Column(
         modifier = Modifier
@@ -71,7 +87,6 @@ fun ProfileContent(profile: Profile) {
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // FIELDS
         ProfileField(label = "Имя", value = profile.name ?: "")
         Spacer(modifier = Modifier.height(12.dp))
 
@@ -84,9 +99,8 @@ fun ProfileContent(profile: Profile) {
         ProfileField(label = "Телефон", value = profile.phoneNumber ?: "")
         Spacer(modifier = Modifier.height(32.dp))
 
-        // Button
         Button(
-            onClick = { /* TODO: Navigate to Edit Profile */ },
+            onClick = onUpdateClick,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(48.dp),

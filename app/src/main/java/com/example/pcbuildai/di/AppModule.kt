@@ -8,6 +8,7 @@ import com.example.pcbuildai.domain.repository.AuthRepository
 import com.example.pcbuildai.domain.usecase.auth.GetProfileUseCase
 import com.example.pcbuildai.domain.usecase.auth.SignInUseCase
 import com.example.pcbuildai.domain.usecase.auth.SignUpUseCase
+import com.example.pcbuildai.domain.usecase.auth.UpdateProfileUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -53,6 +54,12 @@ object AppModule {
     @Singleton
     fun provideGetProfileUseCase(repository: AuthRepository): GetProfileUseCase {
         return GetProfileUseCase(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideUpdateProfileUseCase(repository: AuthRepository): UpdateProfileUseCase {
+        return UpdateProfileUseCase(repository)
     }
 
     @Provides

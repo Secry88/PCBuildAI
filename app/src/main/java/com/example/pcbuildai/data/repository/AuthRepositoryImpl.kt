@@ -1,5 +1,6 @@
 package com.example.pcbuildai.data.repository
 
+import com.example.pcbuildai.data.remote.dto.UpdateProfileDto
 import com.example.pcbuildai.data.remote.services.AuthService
 import com.example.pcbuildai.data.remote.services.ProfileService
 import com.example.pcbuildai.domain.models.Profile
@@ -16,11 +17,21 @@ class AuthRepositoryImpl(
     }
 
     override suspend fun signIn(email: String, password: String): User {
-        return  authService.signIn(email, password)
+        return authService.signIn(email, password)
     }
 
     override suspend fun getProfile(userId: String): Profile {
         return profileService.getProfile(userId).toDomain()
 
+    }
+
+    override suspend fun updateProfile(userId: String, profile: Profile): Profile {
+        val request = UpdateProfileDto(
+            name = profile.name,
+            surname = profile.surname,
+            avatar = profile.avatar,
+            phoneNumber = profile.phoneNumber
+        )
+        return profileService.updateProfile(userId, request).toDomain()
     }
 }

@@ -9,39 +9,52 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.pcbuildai.domain.models.Profile
 import com.example.pcbuildai.presentation.navigation.BottomNavScreen
 import com.example.pcbuildai.presentation.navigation.MainContentNavGraph
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun MainScreen(
-    // ШАГ 1: ПРИНИМАЕМ userId ЗДЕСЬ
     userId: String,
-    onNavigateToAuth: () -> Unit
+    onNavigateToAuth: () -> Unit,
+    navController: NavController
 ) {
-    val mainContentNavController = rememberNavController()
+    val bottomBarNavController = rememberNavController()
 
     Scaffold(
         bottomBar = {
-            // ШАГ 2: ПЕРЕДАЕМ userId В BottomBar
-            BottomBar(navController = mainContentNavController, userId = userId)
+
+            BottomBar(navController = bottomBarNavController)
         }
     ) { innerPadding ->
-        // ШАГ 3: ПЕРЕДАЕМ userId В ГРАФ НАВИГАЦИИ
-        MainContentNavGraph(navController = mainContentNavController, userId = userId)
+
+        MainContentNavGraph(
+            bottomBarNavController = bottomBarNavController,
+            onNavigateToUpdateProfile = { profile: Profile ->
+
+                val name = URLEncoder.encode(profile.name ?: "", StandardCharsets.UTF_8.name())
+                val surname = URLEncoder.encode(profile.surname ?: "", StandardCharsets.UTF_8.name())
+                val phone = URLEncoder.encode(profile.phoneNumber ?: "", StandardCharsets.UTF_8.name())
+
+                navController.navigate("update_profile/$userId?name=$name&surname=$surname&phone=$phone")
+            },
+            userId = userId
+        )
     }
 }
 
 @Composable
 fun BottomBar(
-    // Параметры в правильном порядке
     navController: NavHostController,
-    userId: String
 ) {
     val screens = listOf(
         BottomNavScreen.Home,
@@ -57,8 +70,6 @@ fun BottomBar(
                 icon = { Icon(imageVector = screen.icon, contentDescription = "Navigation Icon") },
                 selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
                 onClick = {
-                    // При клике мы просто переходим по внутреннему маршруту.
-                    // userId здесь для навигации не нужен, он уже проброшен в граф.
                     navController.navigate(screen.route) {
                         popUpTo(navController.graph.findStartDestination().id) {
                             saveState = true
