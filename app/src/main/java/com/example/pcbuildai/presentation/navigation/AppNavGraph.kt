@@ -57,7 +57,13 @@ fun AppNavGraph() {
             MainScreen(
                 userId = userId,
                 navController = rootNavController,
-                bottomNavController = bottomNavController
+                bottomNavController = bottomNavController,
+                onLogout = {
+                    rootNavController.navigate("auth") {
+                        popUpTo(0)   // ← очищаем всю навигацию
+                    }
+                }
+
             )
         }
 

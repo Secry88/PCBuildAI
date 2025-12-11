@@ -19,6 +19,7 @@ fun ProfileScreen(
     viewModel: ProfileViewModel = hiltViewModel(),
     userId: String,
     onNavigateToUpdateProfile: (Profile) -> Unit,
+    onLogoutClick: () -> Unit
 ) {
     val state = viewModel.state
 
@@ -49,7 +50,8 @@ fun ProfileScreen(
         state.profile != null -> {
             ProfileContent(
                 profile = state.profile,
-                onUpdateClick = {onNavigateToUpdateProfile (state.profile)}
+                onUpdateClick = {onNavigateToUpdateProfile (state.profile)},
+                onLogoutClick = onLogoutClick
             )
         }
     }
@@ -58,7 +60,8 @@ fun ProfileScreen(
 @Composable
 fun ProfileContent(
     profile: Profile,
-    onUpdateClick: () -> Unit
+    onUpdateClick: () -> Unit,
+    onLogoutClick: () -> Unit
 ) {
 
     Column(
@@ -115,6 +118,18 @@ fun ProfileContent(
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Medium
             )
+        }
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        OutlinedButton(
+            onClick = onLogoutClick,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(48.dp),
+            shape = RoundedCornerShape(50)
+        ) {
+            Text("Выйти")
         }
     }
 }
