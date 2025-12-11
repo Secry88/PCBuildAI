@@ -1,14 +1,77 @@
 package com.example.pcbuildai.presentation.main
 
 import android.annotation.SuppressLint
-import androidx.compose.material3.Text
-import androidx.compose.material3.Scaffold
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.navigation.NavController
+import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.currentBackStackEntryAsState
+import com.example.pcbuildai.domain.models.Profile
+import com.example.pcbuildai.presentation.navigation.BottomNavScreen
+import com.example.pcbuildai.presentation.navigation.MainContentNavGraph
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun MainScreen() {
-    Scaffold {
-        Text("You are logged in!")
+fun MainScreen(
+    userId: String,
+    navController: NavController,
+    bottomNavController: NavHostController
+) {
+    Scaffold(
+        bottomBar = {
+            BottomBar(navController = bottomNavController)
+        }
+    ) { innerPadding ->
+
+        MainContentNavGraph(
+            bottomBarNavController = bottomNavController,
+            userId = userId,
+            onNavigateToUpdateProfile = { profile: Profile ->
+
+                val name = URLEncoder.encode(profile.name ?: "", StandardCharsets.UTF_8.name())
+                val surname = URLEncoder.encode(profile.surname ?: "", StandardCharsets.UTF_8.name())
+                val phone = URLEncoder.encode(profile.phoneNumber ?: "", StandardCharsets.UTF_8.name())
+
+                navController.navigate(
+                    "update_profile/$userId?name=$name&surname=$surname&phone=$phone"
+                )
+            }
+        )
+    }
+}
+
+@Composable
+fun BottomBar(
+    navController: NavHostController
+) {
+    val screens = listOf(
+        BottomNavScreen.Home,
+        BottomNavScreen.Profile,
+    )
+
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentDestination = navBackStackEntry?.destination
+
+    NavigationBar {
+        screens.forEach { screen ->
+            NavigationBarItem(
+                label = { Text(screen.title) },
+                icon = { Icon(screen.icon, contentDescription = null) },
+                selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
+                onClick = {
+                    navController.navigate(screen.route) {
+                        popUpTo(navController.graph.startDestinationId) {
+                            saveState = true
+                        }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
+                }
+            )
+        }
     }
 }

@@ -1,22 +1,19 @@
 package com.example.pcbuildai.di
 
+import com.example.pcbuildai.data.remote.SupabaseClient
 import com.example.pcbuildai.data.remote.services.AuthService
+import com.example.pcbuildai.data.remote.services.ProfileService
 import com.example.pcbuildai.data.repository.AuthRepositoryImpl
 import com.example.pcbuildai.domain.repository.AuthRepository
-import com.example.pcbuildai.domain.usecase.auth.AuthUseCases
 import com.example.pcbuildai.domain.usecase.auth.GetProfileUseCase
 import com.example.pcbuildai.domain.usecase.auth.SignInUseCase
 import com.example.pcbuildai.domain.usecase.auth.SignUpUseCase
-
+import com.example.pcbuildai.domain.usecase.auth.UpdateProfileUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import io.ktor.client.HttpClient
-import io.ktor.client.engine.okhttp.OkHttp
-import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
-import io.ktor.serialization.kotlinx.json.json
-import kotlinx.serialization.json.Json
 import javax.inject.Singleton
 
 @Module
@@ -24,21 +21,9 @@ import javax.inject.Singleton
 object AppModule {
     @Provides
     @Singleton
-    fun provideHttpClient(): HttpClient =
-        HttpClient(OkHttp) {
-            install(ContentNegotiation) {
-                json(Json {
-                    ignoreUnknownKeys = true
-                    isLenient = true
-                })
-            }
-            expectSuccess = false
-            engine {
-                config {
-                    followRedirects(true)
-                }
-            }
-        }
+    fun provideHttpClient(): HttpClient {
+        return SupabaseClient.supabaseClient
+    }
 
     @Provides
     @Singleton
@@ -47,14 +32,38 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideAuthRepository(service: AuthService) : AuthRepository =
-        AuthRepositoryImpl(service)
+    fun provideAuthRepository(
+        authService: AuthService,
+        profileService: ProfileService
+   ) : AuthRepository =
+        AuthRepositoryImpl(authService, profileService)
 
     @Provides
     @Singleton
-    fun provideAuthUseCases(repository: AuthRepository) = AuthUseCases(
-        signInUseCase = SignInUseCase(repository),
-        signUpUseCase = SignUpUseCase(repository),
-        getProfileUseCase = GetProfileUseCase(repository)
-    )
+    fun provideSignInUseCase(repository: AuthRepository): SignInUseCase {
+        return SignInUseCase(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideSignUpUseCase(repository: AuthRepository): SignUpUseCase {
+        return SignUpUseCase(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGetProfileUseCase(repository: AuthRepository): GetProfileUseCase {
+        return GetProfileUseCase(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideUpdateProfileUseCase(repository: AuthRepository): UpdateProfileUseCase {
+        return UpdateProfileUseCase(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideProfileService(client: HttpClient): ProfileService =
+        ProfileService(client)
 }

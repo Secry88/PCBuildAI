@@ -16,14 +16,14 @@ import androidx.hilt.navigation.compose.hiltViewModel
 
 @Composable
 fun AuthScreen(
-    onLoginSuccess: () -> Unit,
+    onLoginSuccess: (String) -> Unit,
     onNavigateToRegister: () -> Unit,
     viewModel: AuthViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsState()
 
     LaunchedEffect(state.user) {
-        if (state.user != null) onLoginSuccess()
+        if (state.user != null) {onLoginSuccess(state.user!!.id.toString())}
     }
 
     var email by remember { mutableStateOf("") }

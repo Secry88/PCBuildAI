@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.pcbuildai.domain.mapper.AuthErrorMapper
 import com.example.pcbuildai.domain.models.User
 import com.example.pcbuildai.domain.usecase.auth.AuthUseCases
+import com.example.pcbuildai.domain.usecase.auth.SignUpUseCase
 import com.example.pcbuildai.domain.validation.EmailValidator
 import com.example.pcbuildai.domain.validation.PasswordValidator
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,7 +22,7 @@ data class RegisterState(
 
 @HiltViewModel
 class RegisterViewModel @Inject constructor(
-    private val useCases: AuthUseCases
+    private val signUpUseCase: SignUpUseCase
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(RegisterState())
@@ -49,7 +50,7 @@ class RegisterViewModel @Inject constructor(
 
         viewModelScope.launch {
             try {
-                val user = useCases.signUpUseCase(email, password)
+                val user = signUpUseCase(email, password)
                 _state.value = RegisterState(user = user)
             } catch (e: Exception) {
                 val errorMsg = AuthErrorMapper.map(e.message ?: "")

@@ -1,0 +1,31 @@
+package com.example.pcbuildai.presentation.navigation
+
+import ProfileScreen
+import androidx.compose.runtime.Composable
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import com.example.pcbuildai.domain.models.Profile
+import com.example.pcbuildai.presentation.main.HomeScreen
+
+@Composable
+fun MainContentNavGraph(
+    bottomBarNavController: NavHostController,
+    userId: String,
+    onNavigateToUpdateProfile: (Profile) -> Unit,
+) {
+    NavHost(
+        navController = bottomBarNavController,
+        startDestination = BottomNavScreen.Home.route
+    ) {
+        composable(BottomNavScreen.Home.route) {
+            HomeScreen()
+        }
+        composable(BottomNavScreen.Profile.route) {
+            ProfileScreen(
+                userId = userId,
+                onNavigateToUpdateProfile = onNavigateToUpdateProfile
+            )
+        }
+    }
+}
