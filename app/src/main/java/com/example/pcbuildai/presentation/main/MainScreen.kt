@@ -19,7 +19,8 @@ import java.nio.charset.StandardCharsets
 fun MainScreen(
     userId: String,
     navController: NavController,
-    bottomNavController: NavHostController
+    bottomNavController: NavHostController,
+    onLogout: () -> Unit
 ) {
     Scaffold(
         bottomBar = {
@@ -39,7 +40,8 @@ fun MainScreen(
                 navController.navigate(
                     "update_profile/$userId?name=$name&surname=$surname&phone=$phone"
                 )
-            }
+            },
+            onLogout = onLogout
         )
     }
 }

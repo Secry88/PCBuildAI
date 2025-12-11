@@ -13,6 +13,7 @@ fun MainContentNavGraph(
     bottomBarNavController: NavHostController,
     userId: String,
     onNavigateToUpdateProfile: (Profile) -> Unit,
+    onLogout: () -> Unit
 ) {
     NavHost(
         navController = bottomBarNavController,
@@ -24,7 +25,8 @@ fun MainContentNavGraph(
         composable(BottomNavScreen.Profile.route) {
             ProfileScreen(
                 userId = userId,
-                onNavigateToUpdateProfile = onNavigateToUpdateProfile
+                onNavigateToUpdateProfile = onNavigateToUpdateProfile,
+                onLogoutClick = onLogout
             )
         }
     }
