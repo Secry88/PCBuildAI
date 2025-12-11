@@ -9,8 +9,7 @@ import com.example.pcbuildai.domain.repository.AuthRepository
 import toDomain
 
 class AuthRepositoryImpl(
-    private val authService: AuthService,
-    private val profileService: ProfileService
+    private val authService: AuthService
 ) : AuthRepository {
     override suspend fun signUp(email: String, password: String): User {
         return authService.signUp(email, password)
@@ -18,20 +17,5 @@ class AuthRepositoryImpl(
 
     override suspend fun signIn(email: String, password: String): User {
         return authService.signIn(email, password)
-    }
-
-    override suspend fun getProfile(userId: String): Profile {
-        return profileService.getProfile(userId).toDomain()
-
-    }
-
-    override suspend fun updateProfile(userId: String, profile: Profile): Profile {
-        val request = UpdateProfileDto(
-            name = profile.name,
-            surname = profile.surname,
-            avatar = profile.avatar,
-            phoneNumber = profile.phoneNumber
-        )
-        return profileService.updateProfile(userId, request).toDomain()
     }
 }

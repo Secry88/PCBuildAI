@@ -4,11 +4,13 @@ import com.example.pcbuildai.data.remote.SupabaseClient
 import com.example.pcbuildai.data.remote.services.AuthService
 import com.example.pcbuildai.data.remote.services.ProfileService
 import com.example.pcbuildai.data.repository.AuthRepositoryImpl
+import com.example.pcbuildai.data.repository.ProfileRepositoryImpl
 import com.example.pcbuildai.domain.repository.AuthRepository
-import com.example.pcbuildai.domain.usecase.auth.GetProfileUseCase
+import com.example.pcbuildai.domain.repository.ProfileRepository
+import com.example.pcbuildai.domain.usecase.profile.GetProfileUseCase
 import com.example.pcbuildai.domain.usecase.auth.SignInUseCase
 import com.example.pcbuildai.domain.usecase.auth.SignUpUseCase
-import com.example.pcbuildai.domain.usecase.auth.UpdateProfileUseCase
+import com.example.pcbuildai.domain.usecase.profile.UpdateProfileUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -33,10 +35,16 @@ object AppModule {
     @Provides
     @Singleton
     fun provideAuthRepository(
-        authService: AuthService,
-        profileService: ProfileService
+        authService: AuthService
    ) : AuthRepository =
-        AuthRepositoryImpl(authService, profileService)
+        AuthRepositoryImpl(authService)
+
+    @Provides
+    @Singleton
+    fun provideProfileRepository(
+        profileService: ProfileService
+   ) : ProfileRepository =
+        ProfileRepositoryImpl(profileService)
 
     @Provides
     @Singleton
@@ -52,13 +60,13 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideGetProfileUseCase(repository: AuthRepository): GetProfileUseCase {
+    fun provideGetProfileUseCase(repository: ProfileRepository): GetProfileUseCase {
         return GetProfileUseCase(repository)
     }
 
     @Provides
     @Singleton
-    fun provideUpdateProfileUseCase(repository: AuthRepository): UpdateProfileUseCase {
+    fun provideUpdateProfileUseCase(repository: ProfileRepository): UpdateProfileUseCase {
         return UpdateProfileUseCase(repository)
     }
 
