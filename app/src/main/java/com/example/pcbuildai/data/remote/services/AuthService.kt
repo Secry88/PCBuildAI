@@ -14,6 +14,7 @@ import io.ktor.http.contentType
 import io.ktor.http.isSuccess
 import toDomain
 
+@Suppress("JSON_FORMAT_REDUNDANT")
 class AuthService(private val client: HttpClient) {
 
     suspend fun signUp(email: String, password: String): User {

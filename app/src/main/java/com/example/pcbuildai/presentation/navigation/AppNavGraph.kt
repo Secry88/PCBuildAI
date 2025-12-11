@@ -7,42 +7,57 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.example.pcbuildai.domain.models.Profile
 import com.example.pcbuildai.presentation.auth.AuthScreen
 import com.example.pcbuildai.presentation.register.RegistrationScreen
 import com.example.pcbuildai.presentation.main.MainScreen
 import java.util.UUID
+import com.example.pcbuildai.domain.models.Profile
 
 @Composable
 fun AppNavGraph() {
-    val navController = rememberNavController()
-    NavHost(navController, startDestination = "auth") {
+
+    val rootNavController = rememberNavController()
+    val bottomNavController = rememberNavController()
+
+    NavHost(
+        navController = rootNavController,
+        startDestination = "auth"
+    ) {
 
         composable("auth") {
             AuthScreen(
-                onLoginSuccess = { userId -> navController.navigate("main/$userId") },
-                onNavigateToRegister = { navController.navigate("register") }
+                onLoginSuccess = { userId ->
+                    rootNavController.navigate("main/$userId")
+                },
+                onNavigateToRegister = {
+                    rootNavController.navigate("register")
+                }
             )
         }
 
         composable("register") {
             RegistrationScreen(
-                onRegisterSuccess = { navController.navigate("auth") },
-                onNavigateBack = { navController.popBackStack() }
+                onRegisterSuccess = {
+                    rootNavController.navigate("auth")
+                },
+                onNavigateBack = {
+                    rootNavController.popBackStack()
+                }
             )
         }
 
         composable(
             route = "main/{userId}",
-            arguments = listOf(navArgument("userId") { type = NavType.StringType })
-        ) { backStackEntry ->    val userId = backStackEntry.arguments?.getString("userId") ?: return@composable
+            arguments = listOf(
+                navArgument("userId") { type = NavType.StringType }
+            )
+        ) { entry ->
+            val userId = entry.arguments?.getString("userId")!!
 
             MainScreen(
                 userId = userId,
-                onNavigateToAuth = {
-                    navController.navigate("auth") { popUpTo(0) }
-                },
-                navController = navController
+                navController = rootNavController,
+                bottomNavController = bottomNavController
             )
         }
 
@@ -54,33 +69,34 @@ fun AppNavGraph() {
                 navArgument("surname") { type = NavType.StringType; nullable = true },
                 navArgument("phone") { type = NavType.StringType; nullable = true }
             )
-        ) { backStackEntry ->
-            val userId = backStackEntry.arguments?.getString("userId") ?: return@composable
-            val name = backStackEntry.arguments?.getString("name")
-            val surname = backStackEntry.arguments?.getString("surname")
-            val phone = backStackEntry.arguments?.getString("phone")
-            val userIdAsUUID = UUID.fromString(userId)
+        ) { entry ->
 
-            val initialProfile = Profile(
-                id = userIdAsUUID,
-                email = "",
-                name = name,
-                surname = surname,
-                phoneNumber = phone,
-                avatar = null
-            )
+            val userId = entry.arguments?.getString("userId") ?: return@composable
+            val name = entry.arguments?.getString("name")
+            val surname = entry.arguments?.getString("surname")
+            val phone = entry.arguments?.getString("phone")
 
             UpdateProfileScreen(
-                profile = initialProfile,
+                profile = Profile(
+                    id = UUID.fromString(userId),
+                    email = "",
+                    name = name,
+                    surname = surname,
+                    phoneNumber = phone,
+                    avatar = null
+                ),
                 userId = userId,
                 onDone = {
-                    navController.currentBackStackEntry
+                    rootNavController.previousBackStackEntry
                         ?.savedStateHandle
                         ?.set("should_refresh", true)
-                    navController.popBackStack()
+
+                    rootNavController.popBackStack()
+                },
+                onCancel = {
+                    rootNavController.popBackStack()
                 }
             )
         }
     }
 }
-

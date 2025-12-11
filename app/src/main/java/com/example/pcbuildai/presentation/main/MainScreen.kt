@@ -1,20 +1,13 @@
-// Файл: presentation/main/MainScreen.kt
 package com.example.pcbuildai.presentation.main
 
 import android.annotation.SuppressLint
-import androidx.compose.material3.Icon
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
 import com.example.pcbuildai.domain.models.Profile
 import com.example.pcbuildai.presentation.navigation.BottomNavScreen
 import com.example.pcbuildai.presentation.navigation.MainContentNavGraph
@@ -25,53 +18,53 @@ import java.nio.charset.StandardCharsets
 @Composable
 fun MainScreen(
     userId: String,
-    onNavigateToAuth: () -> Unit,
-    navController: NavController
+    navController: NavController,
+    bottomNavController: NavHostController
 ) {
-    val bottomBarNavController = rememberNavController()
-
     Scaffold(
         bottomBar = {
-
-            BottomBar(navController = bottomBarNavController)
+            BottomBar(navController = bottomNavController)
         }
     ) { innerPadding ->
 
         MainContentNavGraph(
-            bottomBarNavController = bottomBarNavController,
+            bottomBarNavController = bottomNavController,
+            userId = userId,
             onNavigateToUpdateProfile = { profile: Profile ->
 
                 val name = URLEncoder.encode(profile.name ?: "", StandardCharsets.UTF_8.name())
                 val surname = URLEncoder.encode(profile.surname ?: "", StandardCharsets.UTF_8.name())
                 val phone = URLEncoder.encode(profile.phoneNumber ?: "", StandardCharsets.UTF_8.name())
 
-                navController.navigate("update_profile/$userId?name=$name&surname=$surname&phone=$phone")
-            },
-            userId = userId
+                navController.navigate(
+                    "update_profile/$userId?name=$name&surname=$surname&phone=$phone"
+                )
+            }
         )
     }
 }
 
 @Composable
 fun BottomBar(
-    navController: NavHostController,
+    navController: NavHostController
 ) {
     val screens = listOf(
         BottomNavScreen.Home,
         BottomNavScreen.Profile,
     )
+
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
 
     NavigationBar {
         screens.forEach { screen ->
             NavigationBarItem(
-                label = { Text(text = screen.title) },
-                icon = { Icon(imageVector = screen.icon, contentDescription = "Navigation Icon") },
+                label = { Text(screen.title) },
+                icon = { Icon(screen.icon, contentDescription = null) },
                 selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
                 onClick = {
                     navController.navigate(screen.route) {
-                        popUpTo(navController.graph.findStartDestination().id) {
+                        popUpTo(navController.graph.startDestinationId) {
                             saveState = true
                         }
                         launchSingleTop = true
