@@ -4,8 +4,10 @@ import java.util.UUID
 
 data class Components(
     val id: UUID,
-    val type: String,
+    val typeId: String,
     val name: String,
     val price: Float,
     val description: String,
 )
+
+

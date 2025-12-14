@@ -9,6 +9,12 @@ data class ComponentsDto(
     val name: String,
     val description: String,
     val price: Float,
-    val type: String,
-    @SerialName("build_id") val buildId: String
+    @SerialName("type_id") val typeId: String,
 )
+
+@Serializable
+data class ComponentWrapperDto(
+    val components: ComponentsDto
+)
+
+

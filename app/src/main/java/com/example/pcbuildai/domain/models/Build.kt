@@ -8,9 +8,6 @@ data class Build(
     val id: UUID,
     val createdAt: Instant,
     val userId: UUID,
-    val budget: Float,
-    val purpose: String,
-    val wishes: String,
-    val comments: String,
-    val components: List<Components>
+    val comment: String,
+    val totalPrice: Float
 )

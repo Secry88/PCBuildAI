@@ -4,7 +4,7 @@ import java.util.UUID
 
 fun ComponentsDto.toDomain() = Components(
     id = UUID.fromString(id),
-    type = type,
+    typeId = typeId,
     name = name,
     price = price,
     description = description
