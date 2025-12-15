@@ -1,11 +1,15 @@
+// presentation/main/HomeScreen.kt
 package com.example.pcbuildai.presentation.main
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -18,16 +22,21 @@ import com.example.pcbuildai.presentation.components.BuildCard
 
 @Composable
 fun HomeScreen(
+    userId: String, // Добавляем параметр userId
     viewModel: HomeViewModel = hiltViewModel()
 ) {
     val state = viewModel.state
+
+    // Устанавливаем userId в ViewModel при создании экрана
+    LaunchedEffect(userId) {
+        viewModel.currentUserId = userId
+    }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(horizontal = 24.dp)
             .padding(bottom = 80.dp)
-            .verticalScroll(rememberScrollState())
     ) {
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -149,71 +158,83 @@ fun HomeScreen(
             }
 
             state.build != null -> {
-                Column {
-                    Text(
-                        text = "Найдена сборка:",
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.SemiBold,
-                        modifier = Modifier.padding(bottom = 12.dp)
-                    )
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
+                        .padding(bottom = 80.dp)
+                ) {
+                    item {
+                        // Переносим весь контент в один item
+                        Column {
+                            Text(
+                                text = "Найдена сборка:",
+                                fontSize = 18.sp,
+                                fontWeight = FontWeight.SemiBold,
+                                modifier = Modifier.padding(bottom = 12.dp)
+                            )
 
-                    BuildCard(
-                        build = state.build!!,
-                        components = state.components,
-                        modifier = Modifier.padding(bottom = 16.dp)
-                    )
+                            BuildCard(
+                                build = state.build!!,
+                                components = state.components,
+                                isFavorite = state.isFavorite,
+                                onFavoriteClick = { viewModel.toggleFavorite() },
+                                modifier = Modifier.padding(bottom = 16.dp)
+                            )
 
-                    Card(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(bottom = 16.dp),
-                        colors = CardDefaults.cardColors(
-                            containerColor = Color(0xFFF5F5F5)
-                        ),
-                        shape = RoundedCornerShape(12.dp)
-                    ) {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(16.dp),
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
-                            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                                Text(
-                                    text = state.components.size.toString(),
-                                    fontSize = 20.sp,
-                                    fontWeight = FontWeight.Bold,
-                                    color = Color.Black
+                            Card(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(bottom = 16.dp),
+                                colors = CardDefaults.cardColors(
+                                    containerColor = Color(0xFFF5F5F5)
+                                ),
+                                shape = RoundedCornerShape(12.dp)
+                            ) {
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(16.dp),
+                                    horizontalArrangement = Arrangement.SpaceBetween
+                                ) {
+                                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                                        Text(
+                                            text = state.components.size.toString(),
+                                            fontSize = 20.sp,
+                                            fontWeight = FontWeight.Bold,
+                                            color = Color.Black
+                                        )
+                                        Text(
+                                            text = "компонентов",
+                                            fontSize = 12.sp,
+                                            color = Color.Gray
+                                        )
+                                    }
+                                }
+                            }
+
+                            OutlinedButton(
+                                onClick = {
+                                    viewModel.updateBudget("")
+                                },
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(48.dp),
+                                shape = RoundedCornerShape(50),
+                                colors = ButtonDefaults.outlinedButtonColors(
+                                    contentColor = Color.Black
+                                ),
+                                border = ButtonDefaults.outlinedButtonBorder.copy(
+                                    width = 1.dp
                                 )
+                            ) {
                                 Text(
-                                    text = "компонентов",
-                                    fontSize = 12.sp,
-                                    color = Color.Gray
+                                    text = "Новый поиск",
+                                    fontSize = 16.sp,
+                                    fontWeight = FontWeight.Medium
                                 )
                             }
                         }
-                    }
-
-                    OutlinedButton(
-                        onClick = {
-                            viewModel.updateBudget("")
-                        },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(48.dp),
-                        shape = RoundedCornerShape(50),
-                        colors = ButtonDefaults.outlinedButtonColors(
-                            contentColor = Color.Black
-                        ),
-                        border = ButtonDefaults.outlinedButtonBorder.copy(
-                            width = 1.dp
-                        )
-                    ) {
-                        Text(
-                            text = "Новый поиск",
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.Medium
-                        )
                     }
                 }
             }

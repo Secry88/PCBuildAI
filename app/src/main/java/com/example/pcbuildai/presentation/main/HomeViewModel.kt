@@ -1,3 +1,4 @@
+// presentation/main/HomeViewModel.kt
 package com.example.pcbuildai.presentation.main
 
 import androidx.compose.runtime.getValue
@@ -5,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.pcbuildai.data.repository.FavoritesRepositoryImpl
 import com.example.pcbuildai.domain.models.Build
 import com.example.pcbuildai.domain.models.Components
 import com.example.pcbuildai.domain.repository.BuildRepository
@@ -16,17 +18,20 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val getBuildUseCase: GetBuildUseCase,
-    private val repository: BuildRepository
+    private val repository: BuildRepository,
+    private val favoritesRepository: FavoritesRepositoryImpl // Используем impl для доступа к методам с userId
 ) : ViewModel() {
 
     var state by mutableStateOf(HomeState())
         private set
 
+    // Для хранения userId (будет устанавливаться из MainScreen)
+    var currentUserId: String? = null
+
     fun updateBudget(value: String) {
         state = state.copy(budget = value)
     }
 
-    // HomeViewModel.kt
     fun findBuild() {
         val budgetValue = state.budget.toFloatOrNull() ?: return
 
@@ -41,15 +46,18 @@ class HomeViewModel @Inject constructor(
                     repository.getComponentsByBuild(it.id.toString())
                 } ?: emptyList()
 
-                println("DEBUG: Received ${components.size} components")
-                components.forEachIndexed { index, component ->
-                    println("DEBUG Component $index: ${component.name} - ${component.price}")
+                // Проверяем, в избранном ли сборка
+                val isFavorite = if (build != null && currentUserId != null) {
+                    favoritesRepository.isFavorite(build.id.toString(), currentUserId!!)
+                } else {
+                    false
                 }
 
                 state = state.copy(
                     isLoading = false,
                     build = build,
-                    components = components
+                    components = components,
+                    isFavorite = isFavorite // Добавляем статус в состояние
                 )
             } catch (e: Exception) {
                 println("DEBUG Error: ${e.message}")
@@ -61,12 +69,40 @@ class HomeViewModel @Inject constructor(
             }
         }
     }
+
+    // Функция переключения избранного
+    fun toggleFavorite() {
+        val build = state.build ?: return
+        val userId = currentUserId ?: return
+
+        viewModelScope.launch {
+            try {
+                if (state.isFavorite) {
+                    // Удаляем из избранного
+                    favoritesRepository.removeFromFavorites(build.id.toString(), userId)
+                } else {
+                    // Добавляем в избранное
+                    favoritesRepository.addToFavorites(build.id.toString(), userId)
+                }
+
+                // Обновляем состояние
+                state = state.copy(
+                    isFavorite = !state.isFavorite
+                )
+            } catch (e: Exception) {
+                println("DEBUG Favorite Error: ${e.message}")
+                // Можно добавить обработку ошибки в UI
+            }
+        }
+    }
 }
 
+// Обновляем HomeState
 data class HomeState(
     val budget: String = "",
     val isLoading: Boolean = false,
     val build: Build? = null,
     val components: List<Components> = emptyList(),
+    val isFavorite: Boolean = false, // Новое поле!
     val error: String? = null
 )

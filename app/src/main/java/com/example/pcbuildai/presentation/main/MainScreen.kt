@@ -1,13 +1,15 @@
+// presentation/main/MainScreen.kt
 package com.example.pcbuildai.presentation.main
 
 import android.annotation.SuppressLint
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.runtime.getValue
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.pcbuildai.domain.models.Profile
 import com.example.pcbuildai.presentation.navigation.BottomNavScreen
 import com.example.pcbuildai.presentation.navigation.MainContentNavGraph
@@ -22,6 +24,15 @@ fun MainScreen(
     bottomNavController: NavHostController,
     onLogout: () -> Unit
 ) {
+
+    // Получаем ViewModel для HomeScreen и устанавливаем userId
+    val homeViewModel = hiltViewModel<HomeViewModel>()
+
+    // Устанавливаем userId при создании экрана
+    LaunchedEffect(userId) {
+        homeViewModel.currentUserId = userId
+    }
+
     Scaffold(
         bottomBar = {
             BottomBar(navController = bottomNavController)
@@ -50,8 +61,10 @@ fun MainScreen(
 fun BottomBar(
     navController: NavHostController
 ) {
+    // Добавляем экран Избранное
     val screens = listOf(
         BottomNavScreen.Home,
+        BottomNavScreen.Favorites, // Добавляем этот экран
         BottomNavScreen.Profile,
     )
 

@@ -3,9 +3,11 @@ package com.example.pcbuildai.di
 import com.example.pcbuildai.data.remote.SupabaseClient
 import com.example.pcbuildai.data.remote.services.AuthService
 import com.example.pcbuildai.data.remote.services.BuildService
+import com.example.pcbuildai.data.remote.services.FavoritesService
 import com.example.pcbuildai.data.remote.services.ProfileService
 import com.example.pcbuildai.data.repository.AuthRepositoryImpl
 import com.example.pcbuildai.data.repository.BuildRepositoryImpl
+import com.example.pcbuildai.data.repository.FavoritesRepositoryImpl
 import com.example.pcbuildai.data.repository.ProfileRepositoryImpl
 import com.example.pcbuildai.domain.repository.AuthRepository
 import com.example.pcbuildai.domain.repository.BuildRepository
@@ -96,5 +98,17 @@ object AppModule {
     @Singleton
     fun provideBuildService(client: HttpClient) : BuildService =
         BuildService(client)
+
+    @Provides
+    @Singleton
+    fun provideFavoritesService(client: HttpClient): FavoritesService {
+        return FavoritesService(client)
+    }
+
+    @Provides
+    @Singleton
+    fun provideFavoritesRepository(service: FavoritesService): FavoritesRepositoryImpl {
+        return FavoritesRepositoryImpl(service)
+    }
 
 }
