@@ -1,4 +1,3 @@
-// presentation/navigation/BottomNavScreen.kt
 package com.example.pcbuildai.presentation.navigation
 
 import androidx.compose.material.icons.Icons
@@ -18,7 +17,7 @@ sealed class BottomNavScreen(
         icon = Icons.Default.Home
     )
 
-    object Favorites : BottomNavScreen( // Добавляем этот экран
+    object Favorites : BottomNavScreen(
         route = "favorites",
         title = "Избранное",
         icon = Icons.Default.Favorite

@@ -11,7 +11,6 @@ class FavoritesRepositoryImpl @Inject constructor(
 ) : FavoritesRepository {
 
     override suspend fun addToFavorites(buildId: String) {
-        // userId будет передаваться из ViewModel
         throw NotImplementedError("Используйте перегруженный метод с userId")
     }
 

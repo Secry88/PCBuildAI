@@ -37,7 +37,6 @@ class BuildService(
         )
     }
 
-    // BuildService.kt - функция getComponentsByBuild
     suspend fun getComponentsByBuild(buildId: String): List<ComponentsDto> {
         val response = client.get(
             "${SupabaseConfig.BASE_URL}/rest/v1/Builds_Components?select=Components(*)&Build_id=eq.$buildId"
@@ -50,14 +49,12 @@ class BuildService(
             throw Exception("Ошибка загрузки компонентов")
         }
 
-        // Выводим сырой ответ для отладки
         val rawResponse = response.bodyAsText()
         println("DEBUG RAW RESPONSE: $rawResponse")
 
         return json.parseToJsonElement(rawResponse)
             .jsonArray
             .mapNotNull {
-                // Используем "Components" с большой буквы
                 it.jsonObject["Components"]?.let { componentJson ->
                     try {
                         json.decodeFromJsonElement(

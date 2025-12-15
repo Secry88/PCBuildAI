@@ -1,4 +1,3 @@
-// presentation/main/MainScreen.kt
 package com.example.pcbuildai.presentation.main
 
 import android.annotation.SuppressLint
@@ -25,10 +24,8 @@ fun MainScreen(
     onLogout: () -> Unit
 ) {
 
-    // Получаем ViewModel для HomeScreen и устанавливаем userId
     val homeViewModel = hiltViewModel<HomeViewModel>()
 
-    // Устанавливаем userId при создании экрана
     LaunchedEffect(userId) {
         homeViewModel.currentUserId = userId
     }
@@ -61,10 +58,9 @@ fun MainScreen(
 fun BottomBar(
     navController: NavHostController
 ) {
-    // Добавляем экран Избранное
     val screens = listOf(
         BottomNavScreen.Home,
-        BottomNavScreen.Favorites, // Добавляем этот экран
+        BottomNavScreen.Favorites,
         BottomNavScreen.Profile,
     )
 

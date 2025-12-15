@@ -1,10 +1,8 @@
-// presentation/favorites/FavoritesScreen.kt - ИСПРАВЛЕННАЯ ВЕРСИЯ
 package com.example.pcbuildai.presentation.favorites
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
@@ -27,16 +25,13 @@ fun FavoritesScreen(
 ) {
     val viewModel: FavoritesViewModel = hiltViewModel()
 
-    // Устанавливаем userId и загружаем избранное
     LaunchedEffect(userId) {
         viewModel.userId = userId
         viewModel.loadFavorites()
     }
 
-    // Используем правильный метод для получения состояния
     val state by viewModel.state.collectAsStateWithLifecycle()
 
-    // УБИРАЕМ verticalScroll из Column и используем ТОЛЬКО LazyColumn
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -119,7 +114,7 @@ fun FavoritesScreen(
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .weight(1f), // Используем weight вместо фиксированной высоты
+                        .weight(1f),
                     contentAlignment = Alignment.Center
                 ) {
                     Column(
@@ -151,16 +146,16 @@ fun FavoritesScreen(
             }
 
             else -> {
-                // Используем LazyColumn для списка, НЕ вкладывая его в другой скроллер
+
                 LazyColumn(
                     verticalArrangement = Arrangement.spacedBy(16.dp),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .weight(1f) // Занимает всё доступное пространство
-                        .padding(bottom = 80.dp) // Отступ для навигационной панели
+                        .weight(1f)
+                        .padding(bottom = 80.dp)
                 ) {
                     items(state.favorites) { build ->
-                        // Используем id как строку для доступа к map
+
                         val buildIdString = build.id.toString()
                         val components = state.componentsMap[buildIdString] ?: emptyList()
                         BuildCard(

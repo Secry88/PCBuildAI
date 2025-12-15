@@ -44,7 +44,6 @@ fun BuildCard(
                 .fillMaxWidth()
                 .padding(20.dp)
         ) {
-            // Заголовок с кнопкой избранного
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -58,7 +57,6 @@ fun BuildCard(
                     modifier = Modifier.weight(1f)
                 )
 
-                // Кнопка избранного
                 IconButton(
                     onClick = onFavoriteClick,
                     modifier = Modifier.size(40.dp)
@@ -93,7 +91,6 @@ fun BuildCard(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Разделитель
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -101,7 +98,6 @@ fun BuildCard(
                     .background(Color(0xFFEEEEEE))
             )
 
-            // Итоговая стоимость
             Row(
                 modifier = Modifier
                     .fillMaxWidth()

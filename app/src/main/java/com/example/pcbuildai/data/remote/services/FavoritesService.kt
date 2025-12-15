@@ -1,4 +1,3 @@
-// data/remote/services/FavoritesService.kt
 package com.example.pcbuildai.data.remote.services
 
 import com.example.pcbuildai.data.remote.SupabaseConfig
@@ -14,7 +13,6 @@ import io.ktor.client.statement.bodyAsText
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import io.ktor.http.isSuccess
-import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.jsonArray
 import kotlinx.serialization.json.jsonObject
@@ -81,7 +79,6 @@ class FavoritesService(
         return data.isNotEmpty()
     }
 
-    // data/remote/services/FavoritesService.kt - добавляем логи
     suspend fun getFavoriteBuilds(userId: String): List<BuildDto> {
         println("DEBUG FavoritesService: Getting favorites for userId: $userId")
 
@@ -108,7 +105,6 @@ class FavoritesService(
         val responseBody = response.bodyAsText()
         println("DEBUG FavoritesService: Response body: $responseBody")
 
-        // Парсим вложенную структуру: [{Builds: {...}}, {Builds: {...}}]
         try {
             val jsonElement = json.parseToJsonElement(responseBody)
             println("DEBUG FavoritesService: Parsed JSON successfully")

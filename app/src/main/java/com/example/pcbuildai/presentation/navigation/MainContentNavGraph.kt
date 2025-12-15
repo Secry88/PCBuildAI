@@ -1,4 +1,3 @@
-// presentation/navigation/MainContentNavGraph.kt
 package com.example.pcbuildai.presentation.navigation
 
 import ProfileScreen
@@ -22,7 +21,7 @@ fun MainContentNavGraph(
         startDestination = BottomNavScreen.Home.route
     ) {
         composable(BottomNavScreen.Home.route) {
-            HomeScreen(userId = userId) // Передаём userId
+            HomeScreen(userId = userId)
         }
         composable(BottomNavScreen.Favorites.route) {
             FavoritesScreen(userId = userId)

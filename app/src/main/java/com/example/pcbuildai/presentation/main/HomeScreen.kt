@@ -1,15 +1,11 @@
-// presentation/main/HomeScreen.kt
 package com.example.pcbuildai.presentation.main
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -22,12 +18,11 @@ import com.example.pcbuildai.presentation.components.BuildCard
 
 @Composable
 fun HomeScreen(
-    userId: String, // Добавляем параметр userId
+    userId: String,
     viewModel: HomeViewModel = hiltViewModel()
 ) {
     val state = viewModel.state
 
-    // Устанавливаем userId в ViewModel при создании экрана
     LaunchedEffect(userId) {
         viewModel.currentUserId = userId
     }
@@ -165,7 +160,6 @@ fun HomeScreen(
                         .padding(bottom = 80.dp)
                 ) {
                     item {
-                        // Переносим весь контент в один item
                         Column {
                             Text(
                                 text = "Найдена сборка:",
