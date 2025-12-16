@@ -18,9 +18,9 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val getBuildUseCase: GetBuildUseCase,
-    private val repository: BuildRepository,
-    private val favoritesRepository: FavoritesRepositoryImpl,
     private val historyRepository: HistoryRepository
+    private val repository: BuildRepository,
+    private val favoritesRepository: FavoritesRepositoryImpl
 ) : ViewModel() {
 
     var state by mutableStateOf(HomeState())
@@ -63,6 +63,10 @@ class HomeViewModel @Inject constructor(
                     } catch (e: Exception) {
                         println("DEBUG: Failed to save to history: ${e.message}")
                     }
+                val isFavorite = if (build != null && currentUserId != null) {
+                    favoritesRepository.isFavorite(build.id.toString(), currentUserId!!)
+                } else {
+                    false
                 }
 
                 state = state.copy(

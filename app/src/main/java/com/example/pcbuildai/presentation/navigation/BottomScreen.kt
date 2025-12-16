@@ -1,6 +1,7 @@
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.History
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -20,6 +21,12 @@ sealed class BottomNavScreen(
         route = "history",
         title = "История",
         icon = Icons.Default.History
+    )
+
+    object Favorites : BottomNavScreen(
+        route = "favorites",
+        title = "Избранное",
+        icon = Icons.Default.Favorite
     )
 
     object Favorites : BottomNavScreen(
