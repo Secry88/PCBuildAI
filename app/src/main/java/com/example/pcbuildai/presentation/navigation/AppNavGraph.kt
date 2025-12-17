@@ -60,7 +60,7 @@ fun AppNavGraph() {
                 bottomNavController = bottomNavController,
                 onLogout = {
                     rootNavController.navigate("auth") {
-                        popUpTo(0)   // ← очищаем всю навигацию
+                        popUpTo(0)
                     }
                 }
 
