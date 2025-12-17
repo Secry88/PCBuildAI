@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.pcbuildai.domain.models.Profile
 import com.example.pcbuildai.presentation.favorites.FavoritesScreen
+import com.example.pcbuildai.presentation.history.HistoryScreen
 import com.example.pcbuildai.presentation.main.HomeScreen
 
 @Composable
@@ -33,5 +34,11 @@ fun MainContentNavGraph(
                 onLogoutClick = onLogout
             )
         }
+        composable(BottomNavScreen.History.route) {
+            HistoryScreen(userId = userId)
+        }
     }
+
+
 }
+

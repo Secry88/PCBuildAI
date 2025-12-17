@@ -10,7 +10,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.pcbuildai.domain.models.Profile
-import com.example.pcbuildai.presentation.navigation.BottomNavScreen
 import com.example.pcbuildai.presentation.navigation.MainContentNavGraph
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
@@ -60,8 +59,9 @@ fun BottomBar(
 ) {
     val screens = listOf(
         BottomNavScreen.Home,
+        BottomNavScreen.History,
         BottomNavScreen.Favorites,
-        BottomNavScreen.Profile,
+        BottomNavScreen.Profile
     )
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()

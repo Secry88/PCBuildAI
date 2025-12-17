@@ -9,6 +9,7 @@ import com.example.pcbuildai.data.repository.FavoritesRepositoryImpl
 import com.example.pcbuildai.domain.models.Build
 import com.example.pcbuildai.domain.models.Components
 import com.example.pcbuildai.domain.repository.BuildRepository
+import com.example.pcbuildai.domain.repository.HistoryRepository
 import com.example.pcbuildai.domain.usecase.build.GetBuildUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -17,6 +18,7 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val getBuildUseCase: GetBuildUseCase,
+    private val historyRepository: HistoryRepository,
     private val repository: BuildRepository,
     private val favoritesRepository: FavoritesRepositoryImpl
 ) : ViewModel() {
@@ -46,6 +48,21 @@ class HomeViewModel @Inject constructor(
 
                 val isFavorite = if (build != null && currentUserId != null) {
                     favoritesRepository.isFavorite(build.id.toString(), currentUserId!!)
+                } else {
+                    false
+                }
+
+                if (build != null && currentUserId != null) {
+                    try {
+                        historyRepository.addToHistory(
+                            buildId = build.id.toString(),
+                            userId = currentUserId!!,
+                            budget = budgetValue
+                        )
+                        println("DEBUG: Added to history")
+                    } catch (e: Exception) {
+                        println("DEBUG: Failed to save to history: ${e.message}")
+                    }
                 } else {
                     false
                 }

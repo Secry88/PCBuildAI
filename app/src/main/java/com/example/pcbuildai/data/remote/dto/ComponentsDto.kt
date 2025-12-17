@@ -12,9 +12,5 @@ data class ComponentsDto(
     @SerialName("type_id") val typeId: String,
 )
 
-@Serializable
-data class ComponentWrapperDto(
-    val components: ComponentsDto
-)
 
 

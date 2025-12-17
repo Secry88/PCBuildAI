@@ -1,6 +1,6 @@
-package com.example.pcbuildai.presentation.navigation
-
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
@@ -15,6 +15,12 @@ sealed class BottomNavScreen(
         route = "home",
         title = "Главная",
         icon = Icons.Default.Home
+    )
+
+    object History : BottomNavScreen(
+        route = "history",
+        title = "История",
+        icon = Icons.Default.History
     )
 
     object Favorites : BottomNavScreen(
