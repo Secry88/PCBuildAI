@@ -5,13 +5,11 @@ import com.example.pcbuildai.data.remote.services.AuthService
 import com.example.pcbuildai.data.remote.services.BuildService
 import com.example.pcbuildai.data.remote.services.FavoritesService
 import com.example.pcbuildai.data.remote.services.HistoryService
-import com.example.pcbuildai.data.remote.services.FavoritesService
 import com.example.pcbuildai.data.remote.services.ProfileService
 import com.example.pcbuildai.data.repository.AuthRepositoryImpl
 import com.example.pcbuildai.data.repository.BuildRepositoryImpl
 import com.example.pcbuildai.data.repository.FavoritesRepositoryImpl
 import com.example.pcbuildai.data.repository.HistoryRepositoryImpl
-import com.example.pcbuildai.data.repository.FavoritesRepositoryImpl
 import com.example.pcbuildai.data.repository.ProfileRepositoryImpl
 import com.example.pcbuildai.domain.repository.AuthRepository
 import com.example.pcbuildai.domain.repository.BuildRepository
@@ -116,19 +114,6 @@ object AppModule {
         return FavoritesRepositoryImpl(service)
     }
 
-    @Provides
-    @Singleton
-    fun provideFavoritesService(client: HttpClient): FavoritesService {
-        return FavoritesService(client)
-    }
-
-    @Provides
-    @Singleton
-    fun provideFavoritesRepository(service: FavoritesService): FavoritesRepositoryImpl {
-        return FavoritesRepositoryImpl(service)
-    }
-
-    // di/AppModule.kt
     @Provides
     @Singleton
     fun provideHistoryService(client: HttpClient): HistoryService {

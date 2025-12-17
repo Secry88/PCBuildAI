@@ -1,4 +1,3 @@
-// presentation/history/HistoryViewModel.kt
 package com.example.pcbuildai.presentation.history
 
 import androidx.compose.runtime.getValue
@@ -36,21 +35,17 @@ class HistoryViewModel @Inject constructor(
         viewModelScope.launch {
             _state.value = _state.value.copy(isLoading = true, error = null)
             try {
-                // Загружаем историю
                 val history = historyRepository.getHistory(currentUserId)
                 println("DEBUG: Loaded ${history.size} history items")
 
-                // Для каждой сборки загружаем компоненты
                 val componentsMap = mutableMapOf<String, List<Components>>()
                 val favoritesMap = mutableMapOf<String, Boolean>()
 
                 history.forEach { build ->
                     try {
-                        // Компоненты
                         val components = buildRepository.getComponentsByBuild(build.id.toString())
                         componentsMap[build.id.toString()] = components
 
-                        // Статус избранного
                         val isFavorite = favoritesRepository.isFavorite(
                             build.id.toString(),
                             currentUserId
@@ -84,7 +79,7 @@ class HistoryViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 historyRepository.clearHistory(currentUserId)
-                loadHistory() // Перезагружаем пустой список
+                loadHistory()
             } catch (e: Exception) {
                 _state.value = _state.value.copy(
                     error = e.message ?: "Ошибка очистки истории"

@@ -18,7 +18,7 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val getBuildUseCase: GetBuildUseCase,
-    private val historyRepository: HistoryRepository
+    private val historyRepository: HistoryRepository,
     private val repository: BuildRepository,
     private val favoritesRepository: FavoritesRepositoryImpl
 ) : ViewModel() {
@@ -63,8 +63,6 @@ class HomeViewModel @Inject constructor(
                     } catch (e: Exception) {
                         println("DEBUG: Failed to save to history: ${e.message}")
                     }
-                val isFavorite = if (build != null && currentUserId != null) {
-                    favoritesRepository.isFavorite(build.id.toString(), currentUserId!!)
                 } else {
                     false
                 }

@@ -1,4 +1,3 @@
-// presentation/history/HistoryScreen.kt
 package com.example.pcbuildai.presentation.history
 
 import androidx.compose.foundation.layout.*
@@ -50,7 +49,6 @@ fun HistoryScreen(
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // Заголовок с кнопкой очистки
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -184,7 +182,6 @@ fun HistoryScreen(
                             components = components,
                             isFavorite = state.favoritesMap[build.id.toString()] ?: false,
                             onFavoriteClick = {
-                                // Можно добавить функционал добавления в избранное из истории
                             },
                             modifier = Modifier.padding(bottom = 8.dp)
                         )
@@ -192,5 +189,6 @@ fun HistoryScreen(
                 }
             }
         }
+        Spacer(modifier = Modifier.height(32.dp))
     }
 }

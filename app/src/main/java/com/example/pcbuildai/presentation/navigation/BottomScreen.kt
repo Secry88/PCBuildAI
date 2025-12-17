@@ -29,12 +29,6 @@ sealed class BottomNavScreen(
         icon = Icons.Default.Favorite
     )
 
-    object Favorites : BottomNavScreen(
-        route = "favorites",
-        title = "Избранное",
-        icon = Icons.Default.Favorite
-    )
-
     object Profile : BottomNavScreen(
         route = "profile",
         title = "Профиль",

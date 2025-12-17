@@ -1,6 +1,6 @@
-// data/remote/services/HistoryService.kt
 package com.example.pcbuildai.data.remote.services
 
+import HistoryInsertDto
 import com.example.pcbuildai.data.remote.SupabaseConfig
 import com.example.pcbuildai.data.remote.dto.BuildDto
 import com.example.pcbuildai.data.remote.dto.HistoryDto
@@ -24,36 +24,37 @@ class HistoryService(
 ) {
     private val json = Json { ignoreUnknownKeys = true }
 
-    suspend fun addToHistory(buildId: String, userId: String, budget: Float? = null) {
-        val response = client.post(
-            "${SupabaseConfig.BASE_URL}/rest/v1/History"
-        ) {
+    suspend fun addToHistory(
+        buildId: String,
+        userId: String,
+        budget: Float? = null
+    ) {
+        val body = HistoryInsertDto(
+            buildId = buildId,
+            userId = userId,
+            searchBudget = budget
+        )
+
+        val response = client.post("${SupabaseConfig.BASE_URL}/rest/v1/history") {
             header("apikey", SupabaseConfig.ANON_KEY)
             header("Authorization", "Bearer ${SupabaseConfig.ANON_KEY}")
             header("Prefer", "return=minimal")
             contentType(ContentType.Application.Json)
-            setBody(
-                mapOf(
-                    "build_id" to buildId,
-                    "user_id" to userId,
-                    "search_budget" to budget
-                )
-            )
+            setBody(body)
         }
 
         if (!response.status.isSuccess()) {
-            println("DEBUG: Failed to add to history: ${response.status}")
-            // Можно не бросать исключение, чтобы не ломать основной поток
+            throw Exception("Ошибка сохранения истории")
         }
     }
 
     suspend fun getHistory(userId: String): List<BuildDto> {
         val response = client.get(
-            "${SupabaseConfig.BASE_URL}/rest/v1/History" +
+            "${SupabaseConfig.BASE_URL}/rest/v1/history" +
                     "?select=Builds(*),viewed_at,search_budget" +
                     "&user_id=eq.$userId" +
                     "&order=viewed_at.desc" +
-                    "&limit=50" // Ограничиваем количество
+                    "&limit=50"
         ) {
             header("apikey", SupabaseConfig.ANON_KEY)
             header("Authorization", "Bearer ${SupabaseConfig.ANON_KEY}")
@@ -63,7 +64,6 @@ class HistoryService(
             throw Exception("Ошибка загрузки истории")
         }
 
-        // Парсим вложенную структуру
         val jsonElement = json.parseToJsonElement(response.bodyAsText())
 
         return jsonElement.jsonArray.mapNotNull { item ->
@@ -75,7 +75,7 @@ class HistoryService(
 
     suspend fun clearHistory(userId: String) {
         val response = client.delete(
-            "${SupabaseConfig.BASE_URL}/rest/v1/History?user_id=eq.$userId"
+            "${SupabaseConfig.BASE_URL}/rest/v1/history?user_id=eq.$userId"
         ) {
             header("apikey", SupabaseConfig.ANON_KEY)
             header("Authorization", "Bearer ${SupabaseConfig.ANON_KEY}")

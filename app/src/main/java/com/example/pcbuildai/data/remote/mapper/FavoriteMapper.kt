@@ -5,8 +5,9 @@ import java.util.UUID
 
 @OptIn(kotlin.time.ExperimentalTime::class)
 fun FavoritesDto.toDomain() = Favorites(
-    id = UUID.fromString(id),
-    userId = UUID.fromString(userId),
-    buildId = UUID.fromString(buildId),
-    createdAt = Instant.parse(createdAt)
+    id = id?.let { UUID.fromString(it) },
+    userId = userId?.let { UUID.fromString(it) },
+    buildId = buildId?.let { UUID.fromString(it) },
+    createdAt = createdAt?.let { Instant.parse(it) }
 )
+
